@@ -2,44 +2,44 @@
  * LISTA.C
  *
  * Este módulo implementa las operaciones de una lista ligada
- * generalizada, esto es, que opera  con cualquier tipo de dato.
+ * generalizada, esto es, que opera con cualquier tipo de dato.
  * Las funciones que implementan las operaciones de la lista
  * reciben como parámetros datos o apuntadores de tipo LISTA y
  * NODO definidos como:
  *
- * struct nodo
- * {
- * void pInfo; // Campo de información
- * struct nodo *pSig; // Campo siguiente
- * };
+ *	struct nodo
+ *	{
+ *		void pInfo;			// Campo de información
+ *		struct nodo *pSig;	// Campo siguiente
+ *	};
  *
- * typedef struct nodo NODO;
- * typedef struct nodo *LISTA;
+ *	typedef struct nodo NODO;
+ *	typedef struct nodo *LISTA;
  *
  * Aunque una variable y un apuntador de tipo LISTA declaradas
  * como:
  *
- * LISTA lista;
- * LISTA *pLista;
+ *	LISTA lista;
+ *	LISTA *pLista;
  *
  * podrían haberse declarado como:
  *
- * NODO *lista;
- * NODO **pLista;
+ *	NODO *lista;
+ *	NODO **pLista;
  *
  * sin necesidad de crear el tipo LISTA, el definir el tipo
  * LISTA permite utilizar a LISTA par hacer referencia a la
- * lista y a NODO para hacer referencia a un nodo de la lis ta.
+ * lista y a NODO para hacer referencia a un nodo de la lista.
  * El uso del tipo LISTA simplifica las declaraciones como
  * la de NODO **plista a LISTA *pLista.
  *************************************************************/
-
-#INCLUDE <stdio.h>
-#include <string.h>
+ 
+#include <alloc.h>
+#include <mem.h>
 
 #include "lista.h"
 
-/****************************** *******************************
+/*************************************************************
  *void inicializarLista(LISTA *pLista)
  *
  * Esta función inicializa (vacía) una lista. pLista es un
@@ -48,12 +48,12 @@
 void inicializarLista(LISTA *pLista)
 {
 	LISTA pTemp;
-
+	
 	/* Mientras haya nodos en la lista */
 	while(*pLista)
 	{
 		pTemp = *pLista;
-		*pLista = (*pLista) ->pSig;
+		*pLista = (*pLista)->pSig;
 		destruyeNodo(pTemp);
 	}
 }
@@ -70,7 +70,7 @@ int listaVacia(LISTA lista)
 }
 
 /*************************************************************
-* void insertarLista(LISTA *pLista, NODO *pPos, NODO *pNodo)
+ * void insertarLista(LISTA *pLista, NODO *pPos, NODO *pNodo)
  *
  * Esta función inserta el nodo apuntado por pNodo en la lista
  * apuntada por el apuntador pLista. pPos es un apuntador al
@@ -87,23 +87,23 @@ void insertarLista(LISTA *pLista, NODO *pPos, NODO *pNodo)
 		*pLista = pNodo;
 		return;
 	}
-
+	
 	/* Si se va a insertar al inicio de la lista */
 	if(!pPos)
 	{
-		Nodo ->pSig = *pLista;
+		pNodo->pSig = *pLista;
 		*pLista = pNodo;
 		return;
 	}
-
+	
 	/* Si se va a insertar después del nodo pPos */
-	pNodo ->pSig = pPos->pSig;
-	pPos->pSig = pNodo;
+		pNodo->pSig = pPos->pSig;
+		pPos->pSig = pNodo;
 }
 
 /*************************************************************
  * int extraerLista(LISTA *pLista, NODO *pPos, void *pDato,
- * int tamDato)
+ *				   int tamDato)
  *
  * Esta función extrae un nodo de la lista si no está vacía.
  * pPos es un apuntador al nodo después del cual esta el nodo
@@ -121,7 +121,7 @@ int extraerLista(LISTA *pLista, NODO *pPos, void *pDato, int tamDato)
 	/* Si la lista esta vacía */
 	if(listaVacia(*pLista)) return 0;
 	
-	/* Si se va a ex traer el primer elemento */
+	/* Si se va a extraer el primer elemento */
 	if(!pPos)
 	{
 		pTemp = *pLista;
@@ -135,7 +135,7 @@ int extraerLista(LISTA *pLista, NODO *pPos, void *pDato, int tamDato)
 		pPos->pSig = pTemp->pSig;
 	}
 	
-	/* Extrae el dato*/
+	/* Extrae el dato */
 	memcpy(pDato, pTemp->pInfo, tamDato);
 	
 	/* Libera el nodo */
@@ -143,8 +143,8 @@ int extraerLista(LISTA *pLista, NODO *pPos, void *pDato, int tamDato)
 	return 1;
 }
 
-/************************************************************* 
- * void visitarLista(LISTA lista, void (* f Visitar)(NODO *pNodo))
+/*************************************************************
+ * void visitarLista(LISTA lista, void (* fVisitar)(NODO *pNodo))
  *
  * Esta función recorre la lista dada por lista. En cada uno
  * de los nodos de la lista la función ejecuta la operación
@@ -161,13 +161,13 @@ void visitarLista(LISTA lista, void (* fVisitar)(NODO *pNodo))
 		fVisitar(lista);
 		
 		/* Va al siguiente nodo */
-		lista = lista ->pSig;
+		lista = lista->pSig;
 	}
 }
 
-/************************************************************* 
+/*************************************************************
  * NODO *buscaLista(LISTA lista, LISTA *pAnt, void *pLlave,
- *  int (* fcmp)(void *pInfo, void *pLlave))
+ *				   int (* fcmp)(void *pInfo, void *pLlave))
  *
  * Esta función busca en la lista dada por lista la primera
  * ocurrencia de un nodo cuyo campo de información al
@@ -184,8 +184,8 @@ void visitarLista(LISTA lista, void (* fVisitar)(NODO *pNodo))
  * a los datos a comparar: pInfo y pLlave que corresponden al
  * campo de información y a la llave. La función fcmp() debe
  * regresar 0 si el campo de información y la llave cumplen con
- * la condición establecida por la función, diferente d e cero
- * en caso contrario. * 
+ * la condición establecida por la función, diferente de cero
+ * en caso contrario.
  *************************************************************/
 NODO *buscaLista(LISTA lista, LISTA *pAnt, void *pLlave,
 				 int (* fcmp)(void *pInfo, void *pLlave))
@@ -200,12 +200,12 @@ NODO *buscaLista(LISTA lista, LISTA *pAnt, void *pLlave,
 		
 		/* avanza al siguiente nodo */
 		*pAnt = lista;
-		lista = lista ->pSig;
+		lista = lista->pSig;
 	}
 	return lista;
 }
 
-/************************************************************* 
+/*************************************************************
  * NODO *creaNodo(void *pDato, int tamDato)
  *
  * Esta función crea un nodo haciendo una petición dinámica de
@@ -220,13 +220,13 @@ NODO *creaNodo(void *pDato, int tamDato)
 	if((pNodo = malloc(sizeof(NODO))))
 	{
 		/* Pide un bloque de memoria para el dato, en forma dinámica */
-		if((pNodo ->pInfo = malloc(tamDato)))
+		if((pNodo->pInfo = malloc(tamDato)))
 			/* Almacena en el campo de información el dato */
 			memcpy(pNodo->pInfo, pDato, tamDato);
 		else return NULL;
 		
 		/* Almacena en el campo siguiente un apuntador nulo */
-		pNodo ->pSig = NULL;
+		pNodo->pSig = NULL;
 	}
 	return pNodo;
 }
