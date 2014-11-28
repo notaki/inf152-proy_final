@@ -19,8 +19,8 @@
  *								raíz del árbol
  *************************************************************/
  
-#include <alloc.h>
-#include <mem.h>
+#include <string.h>
+#include <stdlib.h>
 #include "arbol.h"
 
 /*************************************************************
@@ -288,7 +288,7 @@ HOJA *creaHoja(void *pDato, int tamDato)
 	HOJA *pHoja;
 	
 	/* Pide un bloque de memoria para el nodo, en forma dinámica */
-	if(pHoja = malloc(sizeof(HOJA)))
+	if(pHoja = (HOJA*)malloc(sizeof(HOJA)))
 	{
 		/* Pide un bloque de memoria para el dato, en forma dinámica */
 		if((pHoja->pInfo = malloc(tamDato)))
