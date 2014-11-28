@@ -1,6 +1,6 @@
 #ifndef LISTA_ES_H
 	#define LISTA_ES_H
-	
+
 	typedef struct
 	{
 		char clave[8];		/* 1a Llave de ordenamiento */
@@ -9,9 +9,6 @@
 		int reg;			/* Número del registro en el */
 	} CILES;				/* archivo ENTSAL donde se */
 							/* encuentran las llaves */
-	
-	char archEntrada[] = "ENTRADAS.DAT";
-	char archSalida[] = "SALIDAS.DAT";
 	
 	LISTA generaLista(char es);
 #endif
