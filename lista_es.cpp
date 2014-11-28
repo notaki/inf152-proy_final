@@ -6,6 +6,13 @@ using namespace std;
 char archEntrada[] = "ENTRADAS.DAT";
 char archSalida[] = "SALIDAS.DAT";
 
+ifstream& operator>>(ifstream& ifs, CILES& registro) {
+	ifs >> registro.clave;
+	ifs >> registro.campus >> registro.almacen
+		>> registro.nombre >> registro.cantidad >> registro.unidad;
+	return ifs;
+}
+
 LISTA generaLista(char es) {
 	if (es != 'E' && es != 'S') return NULL;
 	
@@ -16,7 +23,9 @@ LISTA generaLista(char es) {
 	
 	NODO* anterior = NULL;
 	CILES registro;
-	while (ifs >> registro.clave >> registro.campus >> registro.almacen) {
+	int regNum = 1;
+	while (ifs >> registro) {
+		registro.reg = regNum++;
 		CILES* tmpRegistro = new CILES;
 		*tmpRegistro = registro;
 		
