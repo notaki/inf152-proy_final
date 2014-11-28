@@ -217,7 +217,7 @@ NODO *creaNodo(void *pDato, int tamDato)
 	NODO *pNodo;
 	
 	/* Pide un bloque de memoria para el nodo, en forma dinámica */
-	if((pNodo = malloc(sizeof(NODO))))
+	if((pNodo = (NODO*)malloc(sizeof(NODO))))
 	{
 		/* Pide un bloque de memoria para el dato, en forma dinámica */
 		if((pNodo->pInfo = malloc(tamDato)))
