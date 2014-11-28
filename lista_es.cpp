@@ -3,12 +3,15 @@
 #include "lista_es.h"
 using namespace std;
 
+char archEntrada[] = "ENTRADAS.DAT";
+char archSalida[] = "SALIDAS.DAT";
+
 LISTA generaLista(char es) {
 	if (es != 'E' && es != 'S') return NULL;
 	
 	ifstream ifs ((es == 'E') ? archEntrada : archSalida);
 	
-	LISTA lista;
+	LISTA lista = NULL;
 	inicializarLista(&lista);
 	
 	NODO* anterior = NULL;
