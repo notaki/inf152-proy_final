@@ -10,8 +10,8 @@ ifstream& operator>>(ifstream& ifs, CILES& registro) {
 
 ofstream& operator<<(ofstream& ofs, CILES& registro) {
 	ofs << registro.clave << registro.campus << registro.almacen
-		<< registro.nombre << registro.cantidad << registro.unidad;
-	return ifs;
+		<< registro.nombre << registro.cantidad << registro.unidad << '\n';
+	return ofs;
 }
 
 int cilescmp(void* pInfo1, void* pInfo2) {
