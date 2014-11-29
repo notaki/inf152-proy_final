@@ -2,7 +2,9 @@
 #include "inventar.h"
 #include "ciles.h"
 #include "lista.h"
+#include "lista_es.h"
 #include "arbol.h"
+#include "arbolinv.h"
 using namespace std;
 
 char archivo[] = "INVENTAR.DAT";
@@ -14,24 +16,24 @@ void actualizaArchivo(HOJA *pHoja) {
 }
 
 void actualizaInventario(char es) {
-	if (es != 'E' && es != 'S') return NULL;
+	if (es != 'E' && es != 'S') return;
 	
 	LISTA lista = generaLista(es);
 	ARBOL inventario = generaArbol();
 	
 	CILES* registro;
-	while (extraerLista(lista,NULL,registro,sizeof(CILES))) {
+	while (extraerLista(&lista,NULL,registro,sizeof(CILES))) {
 		HOJA** hoja = buscaArbol(&inventario,registro,cilescmp);
 		
 		if (!hoja && es == 'E') {
 			HOJA* tmpRegistro = creaHoja(registro,sizeof(CILES));
 			
-			inventario = insertarArbol(invetnario,tmpRegistro,cilescmp);
+			inventario = insertarArbol(inventario,tmpRegistro,cilescmp);
 			
 			continue;
 		}
 		
-		int* cantidadInv = ((CILES*)(*hoja->pInfo))->cantidad;
+		int* cantidadInv = &((CILES*)((*hoja)->pInfo))->cantidad;
 		*cantidadInv += (es == 'E') ? registro->cantidad : -registro->cantidad; 
 	}
 	
