@@ -9,7 +9,10 @@
 		char campus[2];		/* 2a Llave de ordenamiento */
 		char almacen[2];	/* 3a Llave de ordenamiento */
 		char nombre[30];
-		int cantidad;
+		union quantity {
+			int Z;
+			double R;
+		} cantidad;
 		char unidad[4];
 		int reg;			/* NÃºmero del registro en el */
 	} CILES;				/* archivo ENTSAL donde se */
