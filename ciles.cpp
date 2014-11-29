@@ -8,6 +8,12 @@ ifstream& operator>>(ifstream& ifs, CILES& registro) {
 	return ifs;
 }
 
+ofstream& operator<<(ofstream& ofs, CILES& registro) {
+	ofs << registro.clave << registro.campus << registro.almacen
+		<< registro.nombre << registro.cantidad << registro.unidad;
+	return ifs;
+}
+
 int cilescmp(void* pInfo1, void* pInfo2) {
 	CILES* reg1 = (CILES*)pInfo1;
 	CILES* reg2 = (CILES*)pInfo2;
