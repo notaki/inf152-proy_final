@@ -34,9 +34,8 @@
  * la de NODO **plista a LISTA *pLista.
  *************************************************************/
  
-#include <alloc.h>
-#include <mem.h>
-
+#include <string.h>
+#include <stdlib.h>
 #include "lista.h"
 
 /*************************************************************
