@@ -11,11 +11,13 @@
 		char nombre[30];
 		int cantidad;
 		char unidad[4];
-		int reg;			/* Número del registro en el */
+		int reg;			/* NÃºmero del registro en el */
 	} CILES;				/* archivo ENTSAL donde se */
 							/* encuentran las llaves */
 	
 	int cilescmp(void* pInfo1, void* pInfo2);
 
 	std::ifstream& operator>>(std::ifstream& ifs, CILES& registro);
+	
+	std::ofstream& operator<<(std::ofstream& ofs, CILES& registro);
 #endif
