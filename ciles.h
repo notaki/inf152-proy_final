@@ -9,7 +9,7 @@
 		char campus[2];		/* 2a Llave de ordenamiento */
 		char almacen[2];	/* 3a Llave de ordenamiento */
 		char nombre[30];
-		char unidad[4];
+		unidades unidad;
 		union quantity {
 			int Z;
 			double R;
@@ -19,6 +19,10 @@
 							/* encuentran las llaves */
 	
 	enum unidades {Gr, pz = 100};
+	
+	unidades aUnidad(char[] unidad);
+	
+	char aCadena(unidades unidad);
 	
 	int cilescmp(void* pInfo1, void* pInfo2);
 
