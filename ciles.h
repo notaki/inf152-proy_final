@@ -1,8 +1,10 @@
 #ifndef CILES_H
 	#define CILES_H
-
+	
 	#include <fstream>
-
+	
+	enum unidades {Gr, pz = 100};
+	
 	typedef struct
 	{
 		char clave[8];		/* 1a Llave de ordenamiento */
@@ -17,8 +19,6 @@
 		int reg;			/* Número del registro en el */
 	} CILES;				/* archivo ENTSAL donde se */
 							/* encuentran las llaves */
-	
-	enum unidades {Gr, pz = 100};
 	
 	unidades aUnidad(char[] unidad);
 	
