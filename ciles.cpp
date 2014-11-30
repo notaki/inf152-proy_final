@@ -2,6 +2,16 @@
 #include "ciles.h"
 using namespace std;
 
+unidades aUnidad(char[] unidad) {
+	if (unidad == "Gr") return Gr;
+	if (unidad == "pz") return pz;
+}
+	
+char aCadena(unidades unidad) {
+	if (unidad == Gr) return "Gr";
+	if (unidad == pz) return "pz";
+}
+
 ifstream& operator>>(ifstream& ifs, CILES& registro) {
 	ifs >> registro.clave >> registro.campus >> registro.almacen
 		>> registro.nombre >> registro.unidad;
