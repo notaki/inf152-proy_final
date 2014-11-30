@@ -4,14 +4,26 @@ using namespace std;
 
 ifstream& operator>>(ifstream& ifs, CILES& registro) {
 	ifs >> registro.clave >> registro.campus >> registro.almacen
-		>> registro.nombre >> registro.cantidad >> registro.unidad;
+		>> registro.nombre >> registro.unidad;
+	
+	if (registro.unidad >= 100)
+		ifs >> registro.cantidad.Z;
+	else
+		ifs >> registro.cantidad.R;
+	
 	return ifs;
 }
 
 ofstream& operator<<(ofstream& ofs, CILES& registro) {
 	ofs << registro.clave << registro.campus << registro.almacen
-		<< registro.nombre << registro.cantidad << registro.unidad << '\n';
-	return ofs;
+		<< registro.nombre << registro.unidad;
+	
+	if (registro.unidad >= 100)
+		ofs << registro.cantidad.Z;
+	else
+		ofs << registro.cantidad.R;
+	
+	return ofs << '\n';
 }
 
 int cilescmp(void* pInfo1, void* pInfo2) {
