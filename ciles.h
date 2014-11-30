@@ -9,14 +9,16 @@
 		char campus[2];		/* 2a Llave de ordenamiento */
 		char almacen[2];	/* 3a Llave de ordenamiento */
 		char nombre[30];
+		char unidad[4];
 		union quantity {
 			int Z;
 			double R;
 		} cantidad;
-		char unidad[4];
-		int reg;			/* NÃºmero del registro en el */
+		int reg;			/* Número del registro en el */
 	} CILES;				/* archivo ENTSAL donde se */
 							/* encuentran las llaves */
+	
+	enum unidades {Gr, pz = 100};
 	
 	int cilescmp(void* pInfo1, void* pInfo2);
 
