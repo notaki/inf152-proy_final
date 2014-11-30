@@ -14,7 +14,12 @@ char aCadena(unidades unidad) {
 
 ifstream& operator>>(ifstream& ifs, CILES& registro) {
 	ifs >> registro.clave >> registro.campus >> registro.almacen
-		>> registro.nombre >> registro.unidad;
+		>> registro.nombre;
+	
+	char[4] unidad;
+	ifs >> unidad;
+	
+	registro.unidad =  aUnidad(unidad);
 	
 	if (registro.unidad >= 100)
 		ifs >> registro.cantidad.Z;
@@ -26,7 +31,7 @@ ifstream& operator>>(ifstream& ifs, CILES& registro) {
 
 ofstream& operator<<(ofstream& ofs, CILES& registro) {
 	ofs << registro.clave << registro.campus << registro.almacen
-		<< registro.nombre << registro.unidad;
+		<< registro.nombre << aCadena(registro.unidad);
 	
 	if (registro.unidad >= 100)
 		ofs << registro.cantidad.Z;
