@@ -8,16 +8,23 @@ definiciones excepciones necesarias para el manejo del inventario. */
 
 #include <forward_list>
 #include "ciles.hpp"
+#include "arbol.hpp"
 
 namespace ITSON {
 
-// Únicos parámetros para la función genera_lista(string)
+// Parámetros para la función genera_lista(string)
 const std::string arch_entrada = "ENTRADAS.DAT";
 const std::string arch_salida = "SALIDAS.DAT";
 
+/* Devuelve una lista ligada de objetos CILES. Los objetos se leen del archivo
+   de nombre contenido en el parámetro. */
 std::forward_list<CILES> genera_lista(const std::string& arch);
 
+// Nombre del archivo con los registros del inventario
 const std::string arch_inventario = "INVENTAR.DAT";
+/* Devuelve un árbol binario de objetos CILES. Los objetos se leen del archivo
+   de nombre contenido en arch_inventario. */
+Arbol_binario<CILES> genera_arbol();
 
 /* Contiene las clases para arrojar como excepciones. */
 namespace throwable {
