@@ -63,9 +63,8 @@ void Arbol_binario<T>::inserta(const T& dato, int (* fcmp)(const T&, const T&))
 template <class T>
 T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
 {
-    /* Si la raíz no tiene dato, no hay nada que extraer. Comportamiento
-       indefinido. */
-    if (dato == nullptr) return T { };
+    /* Si la raíz no tiene dato, no hay nada que extraer. */
+    if (dato == nullptr) throw throwable::Operacion_fallida { };
 
     int dif;
     /* Si se encontró el dato... */
@@ -106,17 +105,15 @@ T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
     if (dif > 0 && hoja_izq != nullptr) return hoja_izq->extrae(llave,fcmp);
     /* Si la llave es mayor que el dato de esta hoja, busca por la derecha. */
     else if (dif < 0 && hoja_der != nullptr) return hoja_der->extrae(llave,fcmp);
-    /* Si no hay más hojas, la llave no existe en el árbol. Comportamiento
-       indefinido. */
-    return T { };
+    /* Si no hay más hojas, la llave no existe en el árbol. */
+    return throw throwable::Operacion_fallida { };
 }
 
 template <class T>
 T Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) const
 {
-    /* Si la raíz no tiene dato, no hay nada que buscar. Comportamiento
-       indefinido. */
-    if (dato == nullptr) return T { };
+    /* Si la raíz no tiene dato, no hay nada que buscar. */
+    if (dato == nullptr) throw throwable::Operacion_fallida { };
 
     int dif;
     /* Si se encontró el dato, devuélvelo. */
@@ -126,9 +123,8 @@ T Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) cons
     if (dif > 0 && hoja_izq != nullptr) return hoja_izq->extrae(llave,fcmp);
     /* Si la llave es mayor que el dato de esta hoja, busca por la derecha. */
     else if (dif < 0 && hoja_der != nullptr) return hoja_der->extrae(llave,fcmp);
-    /* Si no hay más hojas, la llave no existe en el árbol. Comportamiento
-       indefinido. */
-    return T { };
+    /* Si no hay más hojas, la llave no existe en el árbol. */
+    return throw throwable::Operacion_fallida { };
 }
 
 template <class T>
