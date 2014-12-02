@@ -1,55 +1,75 @@
-#include <fstream>
-#include "ciles.h"
+/* Johel Guerrero
+   Tercer cuatrimestre 2014 (Nov. 30)
+
+En este archivo se definen las funciones miembro de la estructura CILES para
+guardar un registro del inventario. También se definen funciones de apoyo. */
+#include "itson.hpp"
 using namespace std;
 
-unidades aUnidad(char[] unidad) {
-	if (unidad == "Gr") return Gr;
-	if (unidad == "pz") return pz;
-}
-	
-char aCadena(unidades unidad) {
-	if (unidad == Gr) return "Gr";
-	if (unidad == pz) return "pz";
+namespace ITSON {
+
+CILES::CILES()
+{
+
 }
 
-ifstream& operator>>(ifstream& ifs, CILES& registro) {
-	ifs >> registro.clave >> registro.campus >> registro.almacen
-		>> registro.nombre;
-	
-	char[4] unidad;
-	ifs >> unidad;
-	
-	registro.unidad =  aUnidad(unidad);
-	
-	if (registro.unidad >= 100)
-		ifs >> registro.cantidad.Z;
-	else
-		ifs >> registro.cantidad.R;
-	
-	return ifs;
+/* Arroja la excepción Unidad_desconocida definida en itson.hpp si la cadena
+   unidad no contiene el nombre de una Unidad como se define en el tipo. */
+CILES::CILES(const string& clave, const string& campus, const string& almacen,
+             const string& nombre, const string& cantidad, const string& unidad)
+    : clave_{clave}, campus_{campus}, almacen_{almacen}, nombre_{nombre}
+{
+    unidad_ = a_unidad(unidad);
+
+    if (cantidad_real(unidad_)) cantidad_.real = stod(cantidad);
+    else cantidad_.entero = stoi(cantidad);
 }
 
-ofstream& operator<<(ofstream& ofs, CILES& registro) {
-	ofs << registro.clave << registro.campus << registro.almacen
-		<< registro.nombre << aCadena(registro.unidad);
-	
-	if (registro.unidad >= 100)
-		ofs << registro.cantidad.Z;
-	else
-		ofs << registro.cantidad.R;
-	
-	return ofs << '\n';
+void CILES::asignar_cantidad(const Numero cantidad)
+{
+    cantidad_ = cantidad;
 }
 
-int cilescmp(void* pInfo1, void* pInfo2) {
-	CILES* reg1 = (CILES*)pInfo1;
-	CILES* reg2 = (CILES*)pInfo2;
+/* Arroja la excepción Unidad_fuera_de_rango definida en itson.hpp si el
+   parámetro no es una Unidad definida en el tipo. */
+string a_cadena(const Unidad unidad)
+{
+    switch (unidad) {
+    case unid: return "unid";
+    case mc  : return "mc";
+    case kg  : return "kg";
+    }
+    throw throwable::Unidad_fuera_de_rango {unidad};
+}
 
-	if (reg1->clave != reg2->clave)
-		return strcmp(reg1->clave,reg2->clave);
+/* Arroja la excepción Unidad_desconocida definida en itson.hpp si la cadena
+   unidad no contiene el nombre de una Unidad como se define en el tipo. */
+Unidad a_unidad(const string& unidad)
+{
+    if (unidad == "unid") return unid;
+    if (unidad == "mc")   return mc;
+    if (unidad == "kg")   return kg;
+    throw throwable::Unidad_desconocida {unidad};
+}
 
-	if (reg1->campus != reg2->campus)
-		return strcmp(reg1->campus,reg2->campus);
+/* Devuelve true si la cantidad de la unidad se guarda como número real. */
+bool cantidad_real(const Unidad unidad)
+{
+    if (unidad < Unidad(1)) return true;
+    return false;
+}
 
-	return strcmp(reg1->almacen,reg2->almacen);
+/* Función que define el ordenamiento de los objetos tipo CILES.
+   Devuelve         Si
+    < 0         reg1 < reg2
+     0          reg1 == reg2
+    > 0         reg1 > reg2 */
+int ciles_cmp(const CILES& reg1, const CILES& reg2) {
+    int dif;
+
+    if ((dif = reg1.clave().compare(reg2.clave()))) return dif;
+    if ((dif = reg1.campus().compare(reg2.campus()))) return dif;
+    return reg1.almacen().compare(reg2.almacen());
+}
+
 }
