@@ -29,7 +29,7 @@ public:
     // Para extrae() y busca():
     /* El parámetro llave se usa para comparar con los elementos del árbol y
        devolver el que sea igual a la llave. Si no se encuentra dicho elemento o
-       el árbol está vacío, la función causa comportamiento indefinido. */
+       el árbol está vacío, la función arroja la excepción Operacion_fallida. */
     T extrae(const T& llave, int (* fcmp)(const T&, const T&));
     T busca(const T& llave, int (* fcmp)(const T&, const T&)) const;
 
@@ -48,6 +48,10 @@ private:
     Arbol_binario* hoja_izq;
     Arbol_binario* hoja_der;
 };
+
+namespace throwable {
+    class Operacion_fallida { };
+}
 
 }
 
