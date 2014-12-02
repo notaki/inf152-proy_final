@@ -30,6 +30,35 @@ void CILES::asignar_cantidad(const Numero cantidad)
     cantidad_ = cantidad;
 }
 
+istream& operator>>(istream& ifs, CILES& var)
+{
+    string clave, campus, almacen, nombre, str_cantidad, str_unidad;
+    ifs >> clave >> campus >> almacen;
+    if (!ifs) return ifs;
+
+    /* Para poder leer un nombre con espacios, se lee el resto de la línea.
+       Se espera que en el resto de la línea tenga el formato:
+       nombre cantidad unidad */
+    getline(ifs,nombre);
+    if (!ifs) return ifs;
+    /* Elimina el espacio que en el archivo separa a almacen de nombre. */
+    nombre.erase(nombre.begin());
+
+    /* Guarda la unidad en nombre a str_unidad y elimínala de nombre. */
+    auto pos = nombre.find_last_of(' ');
+    str_unidad = nombre.substr(pos+1);
+    nombre = nombre.substr(0,pos);
+
+    /* Guarda la cantidad en nombre a str_cantidad y elimínala de nombre. */
+    pos = nombre.find_last_of(' ');
+    str_cantidad = nombre.substr(pos+1);
+    nombre = nombre.substr(0,pos);
+
+    var = CILES {clave,campus,almacen,nombre,str_cantidad,str_unidad};
+
+    return ifs;
+}
+
 /* Arroja la excepción Unidad_fuera_de_rango definida en itson.hpp si el
    parámetro no es una Unidad definida en el tipo. */
 string a_cadena(const Unidad unidad)
