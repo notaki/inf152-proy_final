@@ -1,8 +1,8 @@
 /* Johel Guerrero
    Tercer cuatrimestre 2014 (Nov. 30)
 
-En este archivo se define la función que lee de archivo las entradas y salidas
-del inventario. */
+En este archivo se define la función que lee de un archivo las entradas o
+salidas del inventario. */
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -23,37 +23,16 @@ forward_list<CILES> genera_lista(const string& arch)
 
     forward_list<CILES> lista;
 
-    ifstream ifs{arch};
+    ifstream ifs {arch};
     if (!ifs) throw runtime_error {"Error abriendo archivo: " + arch};
 
     auto it = lista.before_begin();
-    for (string clave; ifs >> clave; ) {
-        string campus, almacen, nombre, str_cantidad, str_unidad;
-        ifs >> campus >> almacen;
-
-        /* Para leer un nombre con espacios, guarda el resto de la línea a
-           nombre. Formato de nombre: nombre cantidad unidad */
-        getline(ifs,nombre);
-        /* Elimina el espacio que en el archivo separa a almacen de nombre. */
-        nombre.erase(nombre.begin());
-
-        /* Guarda la unidad en nombre a str_unidad y elimínala de nombre. */
-        auto pos = nombre.find_last_of(' ');
-        str_unidad = nombre.substr(pos+1);
-        nombre = nombre.substr(0,pos);
-
-        /* Guarda la cantidad en nombre a str_cantidad y elimínala de nombre. */
-        pos = nombre.find_last_of(' ');
-        str_cantidad = nombre.substr(pos+1);
-        nombre = nombre.substr(0,pos);
-
-        try {
-            it = lista.emplace_after(it,clave,campus,almacen,
-                                     nombre,str_cantidad,str_unidad);
-        }
-        catch (throwable::Unidad_desconocida& e) {
-            std::cerr << e.what() << ". Registro descartado.\n";
-        }
+    while (ifs)
+    try {
+        for (CILES tmp; ifs >> tmp; it = lista.insert_after(it,tmp));
+    }
+    catch (throwable::Unidad_desconocida& e) {
+        cerr << e.what() << ". Registro descartado.\n";
     }
 
     return lista;
