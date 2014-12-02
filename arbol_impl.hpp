@@ -106,7 +106,7 @@ T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
     /* Si la llave es mayor que el dato de esta hoja, busca por la derecha. */
     else if (dif < 0 && hoja_der != nullptr) return hoja_der->extrae(llave,fcmp);
     /* Si no hay más hojas, la llave no existe en el árbol. */
-    return throw throwable::Operacion_fallida { };
+    throw throwable::Operacion_fallida { };
 }
 
 template <class T>
@@ -124,7 +124,7 @@ T Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) cons
     /* Si la llave es mayor que el dato de esta hoja, busca por la derecha. */
     else if (dif < 0 && hoja_der != nullptr) return hoja_der->extrae(llave,fcmp);
     /* Si no hay más hojas, la llave no existe en el árbol. */
-    return throw throwable::Operacion_fallida { };
+    throw throwable::Operacion_fallida { };
 }
 
 template <class T>
