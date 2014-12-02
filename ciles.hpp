@@ -7,6 +7,7 @@ del inventario. También se declaran tipos y funciones de apoyo. */
 #define CILES_HPP_INCLUDED
 
 #include <string>
+#include <istream>
 
 namespace ITSON {
 
@@ -51,6 +52,8 @@ private:
     Numero cantidad_;     // Cantidad del artículo
     Unidad unidad_;       // Unidad del artículo
 };
+
+std::istream& operator>>(std::istream& ifs, CILES& var);
 
 /* Arroja la excepción Unidad_fuera_de_rango definida en itson.hpp si el
    parámetro no es una Unidad definida en el tipo. */
