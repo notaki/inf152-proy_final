@@ -27,7 +27,8 @@ CILES::CILES(const string& clave, const string& campus, const string& almacen,
 
 void CILES::asignar_cantidad(const Numero cantidad)
 {
-    cantidad_ = cantidad;
+    if (cantidad_real(unidad_)) cantidad_.real = cantidad.real;
+    else cantidad_.entero = cantidad.entero;
 }
 
 istream& operator>>(istream& ifs, CILES& var)
