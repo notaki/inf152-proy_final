@@ -11,15 +11,9 @@ del inventario. También se declaran tipos y funciones de apoyo. */
 
 namespace ITSON {
 
-/* Un objeto Numero guarda la cantidad de un artículo. */
-union Numero {
-    int entero;
-    double real;
-};
-
-/* Un objeto Unidad guarda la unidad de un artículo. Un valor positivo
-   indica que su miembro cantidad es un Numero::entero. Un valor negativo
-   indica que su miembro cantidad es un Numero::real. */
+/* Un objeto Unidad guarda la unidad de un artículo.
+   Un valor positivo indica que su miembro cantidad es un número entero.
+   Un valor negativo indica que su miembro cantidad es un número real. */
 enum Unidad {unid,   // unidades
              mc = -9,// metros cúbicos
              kg};    // kilogramos
@@ -34,26 +28,27 @@ public:
           const std::string& almacen, const std::string& nombre,
           const std::string& cantidad, const std::string& unidad);
 
-    std::string clave() const { return clave_; }
-    std::string campus() const { return campus_; }
-    std::string almacen() const { return almacen_; }
+    const std::string& clave() const { return clave_; }
+    const std::string& campus() const { return campus_; }
+    const std::string& almacen() const { return almacen_; }
 
-    std::string nombre() const { return nombre_; }
-    Numero cantidad() const { return cantidad_; }
+    const std::string& nombre() const { return nombre_; }
+    double cantidad() const { return cantidad_; }
+    double& cantidad() { return cantidad_; }
     Unidad unidad() const { return unidad_; }
-
-    void asignar_cantidad(const Numero cantidad);
 private:
     std::string clave_;   // 1ra llave de ordenamiento
     std::string campus_;  // 2da llave de ordenamiento
     std::string almacen_; // 3ra llave de ordenamiento
 
     std::string nombre_;  // Nombre del artículo
-    Numero cantidad_;     // Cantidad del artículo
+    double cantidad_;     // Cantidad del artículo
     Unidad unidad_;       // Unidad del artículo
 };
 
 std::istream& operator>>(std::istream& ifs, CILES& var);
+
+std::ostream& operator<<(std::ostream& ofs, const CILES& var);
 
 /* Arroja la excepción Unidad_fuera_de_rango definida en itson.hpp si el
    parámetro no es una Unidad definida en el tipo. */
