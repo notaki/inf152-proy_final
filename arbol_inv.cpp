@@ -23,6 +23,7 @@ Arbol_binario<CILES> genera_arbol()
     ifstream ifs {arch_inventario};
     if (!ifs) throw runtime_error {"Error abriendo archivo: " + arch_inventario};
 
+    /* Mientras no se llege al final del archivo, lee entradas. */
     while (ifs)
     try {
         for (CILES tmp; ifs >> tmp; arbol.inserta(tmp,ciles_cmp));
