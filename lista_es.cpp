@@ -19,7 +19,7 @@ namespace ITSON {
 forward_list<CILES> genera_lista(const string& arch)
 {
     if (arch != arch_entrada && arch != arch_salida)
-        throw throwable::Archivo_desconocido {arch};
+        throw throwable::Archivo_desconocido {"Archivo desconocido:",arch};
 
     forward_list<CILES> lista;
 
@@ -27,12 +27,13 @@ forward_list<CILES> genera_lista(const string& arch)
     if (!ifs) throw runtime_error {"Error abriendo archivo: " + arch};
 
     auto it = lista.before_begin();
+    /* Mientras no se llege al final del archivo, lee entradas. */
     while (ifs)
     try {
         for (CILES tmp; ifs >> tmp; it = lista.insert_after(it,tmp));
     }
     catch (throwable::Unidad_desconocida& e) {
-        cerr << e.what() << ". Registro descartado.\n";
+        cerr << e.what() << " - Registro descartado.\n";
     }
 
     return lista;
