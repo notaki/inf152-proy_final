@@ -21,36 +21,43 @@ const std::string arch_salida = "SALIDAS.DAT";
 std::forward_list<CILES> genera_lista(const std::string& arch);
 
 // Nombre del archivo con los registros del inventario
-const std::string arch_inventario = "INVENTAR.DAT";
+const std::string arch_inventario = "INVENTARIO.DAT";
+
 /* Devuelve un árbol binario de objetos CILES. Los objetos se leen del archivo
    de nombre contenido en arch_inventario. */
 Arbol_binario<CILES> genera_arbol();
+
+/* Actualiza el inventario según las entradas o salidas. El parámetro arch es
+   para llamar a la función genera_lista(). */
+void actualiza_inventario(const std::string& arch);
 
 /* Contiene las clases para arrojar como excepciones. */
 namespace throwable {
     class Unidad_fuera_de_rango {
     public:
-        Unidad_fuera_de_rango(const Unidad unidad)
-                          : valor{std::to_string(int(unidad))} { }
-        std::string what() { return "Valor de Unidad fuera de rango: " + valor; }
+        Unidad_fuera_de_rango(const std::string err_msg, const Unidad unidad)
+                      : err_msg{err_msg + " " + std::to_string(int(unidad))} { }
+        std::string what() { return err_msg; }
     private:
-        std::string valor;
+        std::string err_msg;
     };
 
     class Unidad_desconocida {
     public:
-        Unidad_desconocida(const std::string& unidad) : unidad{unidad} { }
-        std::string what() { return "Unidad desconocida: " + unidad; }
+        Unidad_desconocida(const std::string err_msg, const std::string& unidad)
+                          : err_msg{err_msg + " " + unidad} { }
+        std::string what() { return err_msg; }
     private:
-        std::string unidad;
+        std::string err_msg;
     };
 
     class Archivo_desconocido {
     public:
-        Archivo_desconocido(const std::string& archivo) : archivo{archivo} { }
-        std::string what() { return "Arcihivo desconocido: " + archivo; }
+        Archivo_desconocido(const std::string err_msg, const std::string& archivo)
+                           : err_msg{err_msg + " " + archivo} { }
+        std::string what() { return err_msg; }
     private:
-        std::string archivo;
+        std::string err_msg;
     };
 }
 
