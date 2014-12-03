@@ -34,7 +34,8 @@ public:
     T& busca(const T& llave, int (* fcmp)(const T&, const T&)) const;
 
     /* Las funciones visitar_*_orden reciben como parámetro un puntero a
-       función void que recibe un parámetro del tipo de elemento del árbol. */
+       función void que recibe un parámetro del tipo de elemento del árbol. Si
+       el árbol está vacío, la función causa comportamiento indefinido. */
     void visitar_pre_orden(void (* fvisita)(T&));
     void visitar_pre_orden(void (* fvisita)(const T&)) const;
     void visitar_en_orden(void (* fvisita)(T&));
