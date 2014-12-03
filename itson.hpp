@@ -29,7 +29,13 @@ Arbol_binario<CILES> genera_arbol();
 
 /* Actualiza el inventario según las entradas o salidas. El parámetro arch es
    para llamar a la función genera_lista(). */
-void actualiza_inventario(const std::string& arch);
+void actualiza_inventario(Arbol_binario<CILES>& inventario, const std::string& arch);
+
+/* Borra el contenido del archivo de nombre arch_inventario. */
+void vaciar_inventario(Arbol_binario<CILES>& inventario);
+
+/* Lista los registros del inventario hacia la pantalla. */
+void listar_inventario(Arbol_binario<CILES>& inventario);
 
 /* Contiene las clases para arrojar como excepciones. */
 namespace throwable {
