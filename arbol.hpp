@@ -30,8 +30,8 @@ public:
     /* El parámetro llave se usa para comparar con los elementos del árbol y
        devolver el que sea igual a la llave. Si no se encuentra dicho elemento o
        el árbol está vacío, la función arroja la excepción Operacion_fallida. */
-    T extrae(const T& llave, int (* fcmp)(const T&, const T&));
-    T busca(const T& llave, int (* fcmp)(const T&, const T&)) const;
+    T& extrae(const T& llave, int (* fcmp)(const T&, const T&));
+    T& busca(const T& llave, int (* fcmp)(const T&, const T&)) const;
 
     /* Las funciones visitar_*_orden reciben como parámetro un puntero a
        función void que recibe un parámetro del tipo de elemento del árbol. */
