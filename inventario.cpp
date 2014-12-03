@@ -28,6 +28,8 @@ void actualiza_registro(CILES& registro)
 
 void actualiza_archivo(Arbol_binario<CILES>& inventario)
 {
+    if (inventario.vacio()) return;
+
     inventario.visitar_en_orden(actualiza_registro);
     objeto_ofs().close();
 }
