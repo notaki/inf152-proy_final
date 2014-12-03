@@ -61,7 +61,7 @@ void Arbol_binario<T>::inserta(const T& dato, int (* fcmp)(const T&, const T&))
 }
 
 template <class T>
-T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
+T& Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
 {
     /* Si la raíz no tiene dato, no hay nada que extraer. */
     if (dato == nullptr) throw throwable::Operacion_fallida { };
@@ -74,27 +74,33 @@ T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
 
         /* y hay hoja derecha... */
         if (hoja_der != nullptr) {
-            /* busca la hoja más a la izquierda de la hoja derecha... */
-            for (tmp = hoja_der; tmp->hoja_izq != nullptr; tmp = tmp->hoja_izq);
+            /* y hay hoja izquierda... */
+            if (hoja_izq != nullptr) {
+                /* busca la hoja más a la izquierda de la hoja derecha... */
+                for (tmp = hoja_der; tmp->hoja_izq != nullptr; tmp = tmp->hoja_izq);
 
-            /* y conéctale la hoja izquierda de esta hoja. */
-            tmp->hoja_izq = hoja_izq;
+                /* y conéctale la hoja izquierda de esta hoja. */
+                tmp->hoja_izq = hoja_izq;
+            }
 
             /* Sustituye esta hoja con su hoja derecha. */
             this->dato = hoja_der->dato;
             this->hoja_izq = hoja_der->hoja_izq;
             this->hoja_der = hoja_der->hoja_der;
         }
-        /* Si no hay hoja por la derecha, sustiye esta hoja con su izquierda. */
+        /* Si no hay hoja por la derecha... */
         else {
-            if (hoja_izq == nullptr) {
-                this->dato = nullptr;
-                this->hoja_izq = this->hoja_der = nullptr;
-            }
-            else {
+            /* y hay hoja izquierda... */
+            if (hoja_izq != nullptr) {
+                /* Sustituye esta hoja con su hoja izquierda. */
                 this->dato = hoja_izq->dato;
                 this->hoja_der = hoja_izq->hoja_der;
                 this->hoja_izq = hoja_izq->hoja_izq;
+            }
+            /* Sino hay hojas, hazla nula. */
+            else {
+                this->dato = nullptr;
+                this->hoja_izq = this->hoja_der = nullptr;
             }
         }
 
@@ -110,7 +116,7 @@ T Arbol_binario<T>::extrae(const T& llave, int (* fcmp)(const T&, const T&))
 }
 
 template <class T>
-T Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) const
+T& Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) const
 {
     /* Si la raíz no tiene dato, no hay nada que buscar. */
     if (dato == nullptr) throw throwable::Operacion_fallida { };
@@ -120,9 +126,9 @@ T Arbol_binario<T>::busca(const T& llave, int (* fcmp)(const T&, const T&)) cons
     if (!(dif = fcmp(*dato,llave))) return *dato;
 
     /* Si la llave es menor que el dato de esta hoja, busca por la izquierda. */
-    if (dif > 0 && hoja_izq != nullptr) return hoja_izq->extrae(llave,fcmp);
+    if (dif > 0 && hoja_izq != nullptr) return hoja_izq->busca(llave,fcmp);
     /* Si la llave es mayor que el dato de esta hoja, busca por la derecha. */
-    else if (dif < 0 && hoja_der != nullptr) return hoja_der->extrae(llave,fcmp);
+    else if (dif < 0 && hoja_der != nullptr) return hoja_der->busca(llave,fcmp);
     /* Si no hay más hojas, la llave no existe en el árbol. */
     throw throwable::Operacion_fallida { };
 }
