@@ -17,18 +17,10 @@ CILES::CILES()
    unidad no contiene el nombre de una Unidad como se define en el tipo. */
 CILES::CILES(const string& clave, const string& campus, const string& almacen,
              const string& nombre, const string& cantidad, const string& unidad)
-    : clave_{clave}, campus_{campus}, almacen_{almacen}, nombre_{nombre}
+    : clave_{clave}, campus_{campus}, almacen_{almacen},
+      nombre_{nombre}, cantidad_{stod(cantidad)}, unidad_{a_unidad(unidad)}
 {
-    unidad_ = a_unidad(unidad);
 
-    if (cantidad_real(unidad_)) cantidad_.real = stod(cantidad);
-    else cantidad_.entero = stoi(cantidad);
-}
-
-void CILES::asignar_cantidad(const Numero cantidad)
-{
-    if (cantidad_real(unidad_)) cantidad_.real = cantidad.real;
-    else cantidad_.entero = cantidad.entero;
 }
 
 istream& operator>>(istream& ifs, CILES& var)
@@ -60,6 +52,13 @@ istream& operator>>(istream& ifs, CILES& var)
     return ifs;
 }
 
+std::ostream& operator<<(std::ostream& ofs, const CILES& var)
+{
+    return ofs << var.clave() << ' ' << var.campus() << ' '
+               << var.almacen() << ' ' << var.nombre() << ' '
+               << var.cantidad() << ' ' << a_cadena(var.unidad());
+}
+
 /* Arroja la excepción Unidad_fuera_de_rango definida en itson.hpp si el
    parámetro no es una Unidad definida en el tipo. */
 string a_cadena(const Unidad unidad)
@@ -69,7 +68,7 @@ string a_cadena(const Unidad unidad)
     case mc  : return "mc";
     case kg  : return "kg";
     }
-    throw throwable::Unidad_fuera_de_rango {unidad};
+    throw throwable::Unidad_fuera_de_rango {"Valor de Unidad indefinido:",unidad};
 }
 
 /* Arroja la excepción Unidad_desconocida definida en itson.hpp si la cadena
@@ -79,7 +78,7 @@ Unidad a_unidad(const string& unidad)
     if (unidad == "unid") return unid;
     if (unidad == "mc")   return mc;
     if (unidad == "kg")   return kg;
-    throw throwable::Unidad_desconocida {unidad};
+    throw throwable::Unidad_desconocida {"Unidad desconocida:",unidad};
 }
 
 /* Devuelve true si la cantidad de la unidad se guarda como número real. */
