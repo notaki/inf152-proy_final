@@ -67,22 +67,24 @@ CILES& CILES::operator=(double cantidad)
 }
 
 /* Avanza el buffer hasta llegar a un campo o a una nueva línea. El parámetro
-   rechaza_newline indica si no debería encontrarse una nueva línea, y de
-   encontrarse, arroja una excepción. */
+   rechaza_newline indica si no debería encontrarse una nueva línea. */
 void salta_espacio(ifstream& ifs, bool rechaza_newline)
 {
+    if (!ifs) return;
+
     char ch;
     while (ifs.get(ch) && isspace(ch) && ch!='\n');
 
-    if (ch=='\n' && rechaza_newline)
-        throw invalid_argument {"insuficientes campos para un registro"};
-
+    if (ch=='\n' && rechaza_newline) ifs.setstate(ios_base::failbit);
     ifs.unget();
 }
 
 void lee_campo(ifstream& ifs, string& str, bool rechaza_newline = true)
 {
+    if (!ifs) return;
+
     ifs >> str;
+
     salta_espacio(ifs,rechaza_newline);
 }
 
@@ -96,10 +98,7 @@ void lee_campo(ifstream& ifs, string& str, bool rechaza_newline = true)
    La función falla al leer un registro si:
    -una línea no tiene suficientes campos.
    -se lee una unidad no definida.
-   -la unidad se contabiliza con enteros pero se lee una cantidad real.
-
-   La función arroja una excepción:
-   invalid_argument si no hay suficientes campos para completar un registro. */
+   -se lee una cantidad real para una unidad que se contabiliza con enteros. */
 ifstream& operator>>(ifstream& ifs, CILES& registro)
 {
     string clave, campus, almacen, nombre, str_cantidad, unidad;
@@ -109,10 +108,11 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
     lee_campo(ifs,nombre);
     lee_campo(ifs,str_cantidad);
     lee_campo(ifs,unidad,false);
-    if (!ifs) return ifs;
+    if (ifs.fail()) return ifs;
 
     /* Como un nombre puede tener espacios, se lee hasta la nueva línea. */
-    for (string tmp; ifs.peek()!='\n'; unidad += " "+tmp) lee_campo(ifs,tmp,false);
+    for (string tmp; ifs && ifs.peek()!='\n'; unidad += " "+tmp)
+        lee_campo(ifs,tmp,false);
 
     /* Busca el penúltimo campo (cantidad) en unidad. */
     auto pos = unidad.find_last_of(' ');
@@ -138,7 +138,7 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
         registro = CILES {clave,campus,almacen,nombre,cantidad,unidad};
     }
     catch (const logic_error& e) {
-        ifs.clear(ios_base::failbit);
+        ifs.setstate(ios_base::failbit);
     }
 
     return ifs;
