@@ -15,7 +15,7 @@ namespace ITSON {
 forward_list<CILES> genera_lista(ifstream& ifs)
 {
     if (!ifs.is_open())
-        throw invalid_argument {"genera_lista() de archivo no abierto"};
+        throw invalid_argument {"genera_lista() de ifstream::is_open()==false"};
     ifs.seekg(0);
 
     forward_list<CILES> lista;
