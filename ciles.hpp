@@ -52,10 +52,7 @@ private:
    La función falla al leer un registro si:
    -una línea no tiene suficientes campos.
    -se lee una unidad no definida.
-   -la unidad se contabiliza con enteros pero se lee una cantidad real.
-
-   La función arroja una excepción:
-   invalid_argument si no hay suficientes campos para completar un registro. */
+   -se lee una cantidad real para una unidad que se contabiliza con enteros. */
 std::ifstream& operator>>(std::ifstream& ifs, CILES& var);
 
 std::ofstream& operator<<(std::ofstream& ofs, const CILES& var);
