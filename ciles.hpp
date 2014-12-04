@@ -56,7 +56,7 @@ private:
    -se lee una unidad no definida.
    -se lee una cantidad real para una unidad que se contabiliza con enteros. */
 std::ifstream& operator>>(std::ifstream& ifs, CILES& var);
-
+/* Guarda un registro por línea al archivo asociado con el objeto ofstream. */
 std::ofstream& operator<<(std::ofstream& ofs, const CILES& var);
 
 /* Función que define el ordenamiento de los objetos tipo CILES.
