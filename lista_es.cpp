@@ -10,8 +10,8 @@ using namespace std;
 
 namespace ITSON {
 
-/* Devuelve una lista ligada de los registros del archivo asociado con el objeto
-   ifstream para entradas o salidas del inventario. */
+/* Devuelve una lista ligada de los registros de entradas o salidas del
+   inventario del archivo asociado con el parámetro. */
 forward_list<CILES>& genera_lista(ifstream& ifs)
 {
     if (!ifs.is_open())
