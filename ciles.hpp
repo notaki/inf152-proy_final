@@ -22,8 +22,8 @@ public:
 
     /* Asigna una nueva cantidad.
        Arroja la excepción:
-       invalid_argument - Si se intenta asignar una cantidad real a un registro
-                          de unidad entera. */
+       std::invalid_argument - Si se intenta asignar una cantidad real a un
+                               registro de unidad entera. */
     CILES& operator=(double cantidad);
 
     // Llaves de ordenamiento de mayor a menor.
