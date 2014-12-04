@@ -8,6 +8,7 @@ objetos CILES. También se definen funciones de apoyo. */
 #include <unordered_map>
 #include <stdexcept>
 #include <cctype>
+#include <vector>
 #include "ciles.hpp"
 using namespace std;
 
@@ -82,10 +83,17 @@ void salta_espacio(ifstream& ifs, bool rechaza_newline)
 void lee_campo(ifstream& ifs, string& str, bool rechaza_newline = true)
 {
     if (!ifs) return;
-
     ifs >> str;
-
     salta_espacio(ifs,rechaza_newline);
+}
+
+void lee_campo(ifstream& ifs, vector<string*>&& v, bool rechaza_newline = true)
+{
+    if (!ifs) return;
+    for (auto str : v) {
+        ifs >> *str;
+        salta_espacio(ifs,rechaza_newline);
+    }
 }
 
 /* Lee un registro de un archivo con una línea por registro. Los campos están
@@ -102,11 +110,7 @@ void lee_campo(ifstream& ifs, string& str, bool rechaza_newline = true)
 ifstream& operator>>(ifstream& ifs, CILES& registro)
 {
     string clave, campus, almacen, nombre, str_cantidad, unidad;
-    lee_campo(ifs,clave);
-    lee_campo(ifs,campus);
-    lee_campo(ifs,almacen);
-    lee_campo(ifs,nombre);
-    lee_campo(ifs,str_cantidad);
+    lee_campo(ifs,{&clave,&campus,&almacen,&nombre,&str_cantidad});
     lee_campo(ifs,unidad,false);
     if (ifs.fail()) return ifs;
 
@@ -123,18 +127,19 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
 
         /* guarda en cantidad la cantidad real, */
         auto tmp = unidad.find_last_of(' ',pos-1);
-        str_cantidad = unidad.substr(tmp+1,pos);
+        str_cantidad = unidad.substr(tmp+1,pos-tmp-1);
 
         /* agrega a nombre el resto del nombre, */
         if(tmp!=string::npos) nombre += " "+unidad.substr(0,tmp);
 
-        /* y quita de unidad todo menos la unidad. */
+        /* y guarda en unidad la unidad real. */
         unidad = unidad.substr(pos+1);
     }
 
     try {
         double cantidad = stod(str_cantidad);
 
+        validar_cantidad(cantidad,unidad);
         registro = CILES {clave,campus,almacen,nombre,cantidad,unidad};
     }
     catch (const logic_error& e) {
