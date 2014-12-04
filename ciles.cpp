@@ -32,27 +32,24 @@ CILES::CILES(const string& clave, const string& campus, const string& almacen,
 unordered_map<string,bool> inicializar_m_unidad()
 {
     unordered_map<string,bool> m;
-
     /* Si (*m)[unidad] == true  entonces su valor se representa con enteros.
        Si (*m)[unidad] == false entonces su valor se representa con reales. */
     m["unid"] = true;    // unidades
     m["mc"] = false;     // metros cúbicos
     m["kg"] = false;     // kilogramos
-
     return m;
 }
 
 const unordered_map<string,bool>& m_unidad()
 {
-    static const unordered_map<string,bool> m = inicializar_m_unidad();
-
+    static const unordered_map<string,bool> m=inicializar_m_unidad();
     return m;
 }
 
 void validar_cantidad(double cantidad, const string& unidad)
 {
     /* Revisa si la cantidad de una unidad entera tiene un valor entero. */
-    if (m_unidad().at(unidad) && (cantidad-int(cantidad) != 0.0))
+    if (m_unidad().at(unidad) && (cantidad-int(cantidad)!=0.0))
         throw invalid_argument {"cantidad real " + to_string(cantidad) +
                                 " para unidad " + unidad};
 }
@@ -65,8 +62,7 @@ CILES& CILES::operator=(double cantidad)
 {
     validar_cantidad(cantidad_,unidad_);
 
-    cantidad_ = cantidad;
-
+    cantidad_=cantidad;
     return *this;
 }
 
@@ -80,21 +76,24 @@ void salta_espacio(ifstream& ifs, bool rechaza_newline)
     while (ifs.get(ch) && isspace(ch) && ch!='\n');
 
     if (ch=='\n' && rechaza_newline) ifs.setstate(ios_base::failbit);
+
     ifs.unget();
 }
 
 void lee_campo(ifstream& ifs, string& str, bool rechaza_newline = true)
 {
     if (!ifs) return;
-    ifs >> str;
+
+    ifs>>str;
     salta_espacio(ifs,rechaza_newline);
 }
 
 void lee_campo(ifstream& ifs, vector<string*>&& v, bool rechaza_newline = true)
 {
     if (!ifs) return;
+
     for (auto str : v) {
-        ifs >> *str;
+        ifs>>*str;
         salta_espacio(ifs,rechaza_newline);
     }
 }
@@ -122,28 +121,28 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
         lee_campo(ifs,tmp,false);
 
     /* Busca el penúltimo campo (cantidad) en unidad. */
-    auto pos = unidad.find_last_of(' ');
+    auto pos=unidad.find_last_of(' ');
     /* Si existe en unidad... */
     if (pos!=string::npos) {
         /* agrega cantidad a nombre, */
         nombre += " "+str_cantidad;
 
         /* guarda en cantidad la cantidad real, */
-        auto tmp = unidad.find_last_of(' ',pos-1);
-        str_cantidad = unidad.substr(tmp+1,pos-tmp-1);
+        auto tmp=unidad.find_last_of(' ',pos-1);
+        str_cantidad=unidad.substr(tmp+1,pos-tmp-1);
 
         /* agrega a nombre el resto del nombre, */
         if(tmp!=string::npos) nombre += " "+unidad.substr(0,tmp);
 
         /* y guarda en unidad la unidad real. */
-        unidad = unidad.substr(pos+1);
+        unidad=unidad.substr(pos+1);
     }
 
     try {
-        double cantidad = stod(str_cantidad);
-
+        double cantidad=stod(str_cantidad);
         validar_cantidad(cantidad,unidad);
-        registro = CILES {clave,campus,almacen,nombre,cantidad,unidad};
+
+        registro=CILES {clave,campus,almacen,nombre,cantidad,unidad};
     }
     catch (const logic_error& e) {
         ifs.setstate(ios_base::failbit);
@@ -152,12 +151,11 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
     return ifs;
 }
 
+/* Guarda un registro por línea al archivo asociado con el objeto ofstream. */
 ofstream& operator<<(ofstream& ofs, const CILES& registro)
 {
-    ofs << registro.clave() << ' ' << registro.campus() << ' '
-        << registro.almacen() << ' ' << registro.nombre() << ' '
-        << registro.cantidad() << ' ' << registro.unidad();
-
+    ofs<<registro.clave()<<' '<< registro.campus()<<' '<<registro.almacen()<<' '
+       <<registro.nombre()<<' '<<registro.cantidad()<<' '<<registro.unidad();
     return ofs;
 }
 
