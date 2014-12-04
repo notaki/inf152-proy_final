@@ -1,42 +1,33 @@
 /* Johel Guerrero
    Tercer cuatrimestre 2014 (Nov. 30)
 
-En este archivo se define la función que lee de un archivo las entradas o
-salidas del inventario. */
+En este archivo se define la función genera_lista() que lee de un archivo las
+entradas o salidas del inventario. */
+#include <forward_list>
 #include <stdexcept>
-#include <iostream>
-#include <fstream>
-#include "itson.hpp"
+#include "ciles.hpp"
 using namespace std;
 
 namespace ITSON {
 
-/* Devuelve una lista ligada de objetos CILES. Los objetos se leen del archivo
-   indicado por el parámetro. Los posibles parámetros se definen en itson.hpp.
-   Los archivos tienen un objeto por línea, cada uno de formato:
-
-   clave campus almacen nombre cantidad unidad */
-forward_list<CILES> genera_lista(const string& arch)
+/* Devuelve una lista ligada de los registros del archivo asociado con el objeto
+   ifstream para entradas o salidas del inventario. */
+forward_list<CILES>& genera_lista(ifstream& ifs)
 {
-    if (arch != arch_entrada && arch != arch_salida)
-        throw throwable::Archivo_desconocido {"Archivo desconocido:",arch};
+    if (!ifs.is_open())
+        throw invalid_argument {"genera_lista() de archivo no abierto"};
+    ifs.seekg(0);
 
-    forward_list<CILES> lista;
+    forward_list<CILES>* lista = new forward_list<CILES>;
 
-    ifstream ifs {arch};
-    if (!ifs) throw runtime_error {"Error abriendo archivo: " + arch};
-
-    auto it = lista.before_begin();
-    /* Mientras no se llege al final del archivo, lee entradas. */
-    while (ifs)
-    try {
-        for (CILES tmp; ifs >> tmp; it = lista.insert_after(it,tmp));
-    }
-    catch (throwable::Unidad_desconocida& e) {
-        cerr << e.what() << " - Registro descartado.\n";
+    auto it = lista->before_begin();
+    /* Mientras no se llege al final del archivo, lee registros. */
+    while (ifs) {
+        for (CILES reg; ifs >> reg; it = lista->insert_after(it,reg));
+        if (ifs.fail() && !ifs.eof()) ifs.clear();
     }
 
-    return lista;
+    return *lista;
 }
 
 }
