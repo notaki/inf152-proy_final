@@ -29,30 +29,30 @@ CILES::CILES(const string& clave, const string& campus, const string& almacen,
 }
 
 /* Se definen las unidades reconocidas por CILES. */
-unordered_map<string,bool>& inicializar_m_unidad()
+unordered_map<string,bool> inicializar_m_unidad()
 {
-    unordered_map<string,bool>* m = new unordered_map<string,bool>;
+    unordered_map<string,bool> m;
 
     /* Si (*m)[unidad] == true  entonces su valor se representa con enteros.
        Si (*m)[unidad] == false entonces su valor se representa con reales. */
-    (*m)["unid"] = true;    // unidades
-    (*m)["mc"] = false;     // metros cúbicos
-    (*m)["kg"] = false;     // kilogramos
+    m["unid"] = true;    // unidades
+    m["mc"] = false;     // metros cúbicos
+    m["kg"] = false;     // kilogramos
 
-    return *m;
+    return m;
 }
 
-unordered_map<string,bool>& m_unidad()
+const unordered_map<string,bool>& m_unidad()
 {
-    static unordered_map<string,bool>& m = inicializar_m_unidad();
+    static const unordered_map<string,bool> m = inicializar_m_unidad();
 
     return m;
 }
 
 void validar_cantidad(double cantidad, const string& unidad)
 {
-    /* Revisa si la cantidad de una unidad entera tiene un valor válido. */
-    if (m_unidad()[unidad] && (cantidad-int(cantidad) != 0.0))
+    /* Revisa si la cantidad de una unidad entera tiene un valor entero. */
+    if (m_unidad().at(unidad) && (cantidad-int(cantidad) != 0.0))
         throw invalid_argument {"cantidad real " + to_string(cantidad) +
                                 " para unidad " + unidad};
 }
