@@ -20,10 +20,10 @@ forward_list<CILES> genera_lista(ifstream& ifs)
 
     forward_list<CILES> lista;
 
-    auto it = lista.before_begin();
+    auto it=lista.before_begin();
     /* Mientras no se llege al final del archivo, lee registros. */
     while (ifs) {
-        for (CILES reg; ifs >> reg; it = lista.insert_after(it,reg));
+        for (CILES reg; ifs>>reg; it=lista.insert_after(it,reg));
         if (ifs.fail() && !ifs.eof()) ifs.clear();
     }
 
