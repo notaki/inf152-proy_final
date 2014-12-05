@@ -15,7 +15,7 @@ namespace ITSON {
 /* Nombre de archivo del inventario. */
 const string arch_inventario = "INVENTARIO.DAT";
 
-/* Devuelve el stream asociado con el archivo del inventario. */
+/* Devuelve el ofstream asociado con el archivo del inventario. */
 ofstream& ofs_inv()
 {
     static ofstream ofs {arch_inventario};
