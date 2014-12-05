@@ -1,8 +1,8 @@
 /* Johel Guerrero
    Tercer cuatrimestre 2014 (Nov. 30)
 
-En esta cabecera se reunen las declaraciones de las funciones, constantes y las
-definiciones excepciones necesarias para el manejo del inventario. */
+En esta cabecera se reunen las declaraciones de las clases y funciones
+necesarias para manejar el inventario. */
 #ifndef ITSON_HPP_INCLUDED
 #define ITSON_HPP_INCLUDED
 
@@ -12,60 +12,27 @@ definiciones excepciones necesarias para el manejo del inventario. */
 
 namespace ITSON {
 
-// Parámetros para la función genera_lista(string)
-const std::string arch_entrada = "ENTRADAS.DAT";
-const std::string arch_salida = "SALIDAS.DAT";
+/* Devuelve una lista ligada de los registros de entradas o salidas del
+   inventario del archivo asociado con el parámetro. */
+forward_list<CILES> generar_lista(ifstream& ifs);
 
-/* Devuelve una lista ligada de objetos CILES. Los objetos se leen del archivo
-   de nombre contenido en el parámetro. */
-std::forward_list<CILES> genera_lista(const std::string& arch);
+/* Devuelve un árbol binario de objetos CILES de los registros del inventario
+   del archivo asociado con el parámetro. */
+Arbol_binario<CILES> generar_arbol(ifstream& ifs);
 
-// Nombre del archivo con los registros del inventario
-const std::string arch_inventario = "INVENTARIO.DAT";
+/* Actualiza el inventario según las entradas o salidas de la lista. El
+   parámetro ofstream es el stream asociado al archivo del inventario. El
+   parámetro entrada indica si la lista es de entrada. */
+void actualizar_inventario(Arbol_binario<CILES>& inventario,
+                          const forward_list<CILES>& lista, bool entrada);
 
-/* Devuelve un árbol binario de objetos CILES. Los objetos se leen del archivo
-   de nombre contenido en arch_inventario. */
-Arbol_binario<CILES> genera_arbol();
-
-/* Actualiza el inventario según las entradas o salidas. El parámetro arch es
-   para llamar a la función genera_lista(). */
-void actualiza_inventario(Arbol_binario<CILES>& inventario, const std::string& arch);
-
-/* Borra el contenido del archivo de nombre arch_inventario. */
+/* Borra el contenido del archivo del inventario y de su árbol binario. */
 void vaciar_inventario(Arbol_binario<CILES>& inventario);
 
-/* Lista los registros del inventario hacia la pantalla. */
-void listar_inventario(Arbol_binario<CILES>& inventario);
-
-/* Contiene las clases para arrojar como excepciones. */
-namespace throwable {
-    class Unidad_fuera_de_rango {
-    public:
-        Unidad_fuera_de_rango(const std::string err_msg, const Unidad unidad)
-                      : err_msg{err_msg + " " + std::to_string(int(unidad))} { }
-        std::string what() { return err_msg; }
-    private:
-        std::string err_msg;
-    };
-
-    class Unidad_desconocida {
-    public:
-        Unidad_desconocida(const std::string err_msg, const std::string& unidad)
-                          : err_msg{err_msg + " " + unidad} { }
-        std::string what() { return err_msg; }
-    private:
-        std::string err_msg;
-    };
-
-    class Archivo_desconocido {
-    public:
-        Archivo_desconocido(const std::string err_msg, const std::string& archivo)
-                           : err_msg{err_msg + " " + archivo} { }
-        std::string what() { return err_msg; }
-    private:
-        std::string err_msg;
-    };
-}
+/* Lista los registros del inventario hacia la pantalla (implementado por el
+   parámetro imprimir).*/
+void listar_inventario(Arbol_binario<CILES>& inventario,
+                       void (* imprimir)(CILES& registro));
 
 }
 
