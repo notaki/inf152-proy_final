@@ -51,7 +51,7 @@ void actualizar_inventario(Arbol_binario<CILES>& inventario,
         CILES& registro=inventario.buscar(*it,ciles_cmp);
 
         /* y actualiza su cantidad. */
-        registro=it->cantidad()*((entrada) ? 1 : -1);
+        registro+=it->cantidad()*((entrada) ? 1 : -1);
     }
     /* Si no existe en el inventario... */
     catch (const range_error& e) {
