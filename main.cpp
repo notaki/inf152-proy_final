@@ -10,16 +10,16 @@ namespace interfaz {
 typedef std::forward_list<CILES> Lista;
 typedef Arbol_binario<CILES> Arbol;
 
-/* Opciones para escoger en los diferentes menú de la interfaz. */
+/* Opciones para escoger en los diferentes menús de la interfaz. */
 enum class Opc {claves,entradas,salidas,inventario,salir};
-const Opc actualizar=Opc::claves;
-const Opc iniciar=Opc::entradas;
-const Opc listar=Opc::salidas;
+const Opc actualizar {Opc::claves};
+const Opc iniciar {Opc::entradas};
+const Opc listar {Opc::salidas};
 
 /* Interfaz de la figura 16-24. */
 Opc menu_actualizar(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion;
+    Opc opcion=Opc::salir;
 
     // Consigue la opción que escoge el usuario en la interfaz.
 
@@ -44,7 +44,7 @@ void imprimir(const CILES& registro)
 /* Interfaz de la figura 16-23. */
 Opc menu_inventario(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion;
+    Opc opcion=Opc::salir;
 
     // Consigue la opción que escoge el usuario en la interfaz.
 
@@ -120,7 +120,7 @@ void claves(const Lista& lista_ent, const Arbol& inventario)
 /* Interfaz de la figura 16-22. */
 Opc menu_principal(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion;
+    Opc opcion=Opc::salir;
 
     // Consigue la opción que escoge el usuario en la interfaz.
 
@@ -140,35 +140,38 @@ Opc menu_principal(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 
 } // Final de namespace interfaz
 
+/* Devuelve el ifstream asociado con el archivo de nombre del parámetro. */
+std::ifstream& genera_ifstream(const std::string& arch="")
+{
+    static std::ifstream ifs;
+    if (ifs.is_open()) ifs.close();
+    if (!arch.empty()) {
+        ifs.open(arch);
+        if (!ifs) throw std::runtime_error {"error abriendo/creando archivo " +
+                                             arch};
+        if (ifs.exceptions()!=std::ios_base::badbit)
+            ifs.exceptions(ifs.exceptions()|std::ios_base::badbit);
+    }
+    return ifs;
+}
+
 int main()
 try {
     const std::string arch_ent {"ENTRADAS.DAT"};
-    std::ifstream ifs_ent {arch_ent}; // Para generar lista de entrada
-    if (!ifs_ent) throw std::runtime_error {"error abriendo/creando archivo " +
-                                              arch_ent};
-    ifs_ent.exceptions(ifs_ent.exceptions()|std::ios_base::badbit);
+    auto lista_ent=generar_lista(genera_ifstream(arch_ent));
 
     const std::string arch_sal {"SALIDAS.DAT"};
-    std::ifstream ifs_sal {arch_sal}; // Para generar lista de salida
-    if (!ifs_sal) throw std::runtime_error {"error abriendo/creando archivo " +
-                                             arch_sal};
-    ifs_sal.exceptions(ifs_sal.exceptions()|std::ios_base::badbit);
+    auto lista_sal=generar_lista(genera_ifstream(arch_sal));
 
     const std::string arch_inventario {"INVENTARIO.DAT"};
-    std::ifstream ifs_inv {arch_inventario}; // Para generar árbol de inventario
-    if (!ifs_inv) throw std::runtime_error {"error abriendo/creando archivo " +
-                                             arch_inventario};
-    ifs_inv.exceptions(ifs_inv.exceptions()|std::ios_base::badbit);
+    auto inventario=generar_arbol(genera_ifstream(arch_inventario));
 
-    auto lista_ent=generar_lista(ifs_ent);
-    auto lista_sal=generar_lista(ifs_sal);
-
-    auto inventario=generar_arbol(ifs_inv);
+    genera_ifstream();
 
     while (interfaz::menu_principal(lista_ent,lista_sal,inventario)
            !=interfaz::Opc::salir);
 }
-catch (std::exception& e) {
+catch (const std::exception& e) {
     std::cerr<<e.what()<<'\n';
-    return -1;
+    return -2;
 }
