@@ -34,7 +34,7 @@ public:
        Arroja la excepción:
        std::range_error - Si el árbol está vacío o la llave no coincide con
                           ningún elemento. */
-    T& extraer(const T& llave, int (* fcmp)(const T&, const T&));
+    T extraer(const T& llave, int (* fcmp)(const T&, const T&));
     T& buscar(const T& llave, int (* fcmp)(const T&, const T&)) const;
 
     /* Las funciones visitar_*_orden reciben como parámetro un puntero a
