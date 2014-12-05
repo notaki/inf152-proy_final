@@ -24,7 +24,7 @@ Arbol_binario<CILES> generar_arbol(std::ifstream& ifs);
    parámetro ofstream es el stream asociado al archivo del inventario. El
    parámetro entrada indica si la lista es de entrada. */
 void actualizar_inventario(Arbol_binario<CILES>& inventario,
-                          const std::forward_list<CILES>& lista, bool entrada);
+                           const std::forward_list<CILES>& lista, bool entrada);
 
 /* Borra el contenido del archivo del inventario y de su árbol binario. */
 void vaciar_inventario(Arbol_binario<CILES>& inventario);
