@@ -54,15 +54,15 @@ void validar_cantidad(double cantidad, const string& unidad)
                                 " para unidad " + unidad};
 }
 
-/* Asigna una nueva cantidad.
+/* Suma a la cantidad del registro.
    Arroja la excepción:
    std::invalid_argument - Si se intenta asignar una cantidad real a un registro
                            de unidad entera. */
-CILES& CILES::operator=(double cantidad)
+CILES& CILES::operator+=(double cantidad)
 {
     validar_cantidad(cantidad_,unidad_);
 
-    cantidad_=cantidad;
+    cantidad_+=cantidad;
     return *this;
 }
 
