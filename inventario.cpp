@@ -22,6 +22,8 @@ ofstream& ofs_inv()
     if (!ofs.is_open()) ofs.open(arch_inventario);
     if (!ofs) throw runtime_error {"error abriendo/creando archivo " +
                                     arch_inventario};
+    if (ofs.exceptions()!=ios_base::badbit)
+        ofs.exceptions(ofs.exceptions()|ios_base::badbit);
     return ofs;
 }
 
