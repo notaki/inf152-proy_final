@@ -62,6 +62,10 @@ void actualizar_inventario(Arbol_binario<CILES>& inventario,
         else cerr<<e.what()<<"\nllaves: "<<it->clave()<<' '<<it->campus()<<' '
                  <<it->almacen()<<'\n';
     }
+    /* Si no se pudo aumentar la cantidad. */
+    catch (const std::invalid_argument& e) {
+        cerr<<e.what()<<'\n';
+    }
 
     actualiza_archivo(inventario);
 }
