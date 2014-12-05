@@ -72,7 +72,7 @@ void Arbol_binario<T>::insertar(const T& dato, int (* fcmp)(const T&, const T&))
 }
 
 template <class T>
-T& Arbol_binario<T>::extraer(const T& llave, int (* fcmp)(const T&, const T&))
+T Arbol_binario<T>::extraer(const T& llave, int (* fcmp)(const T&, const T&))
 {
     /* Si la raíz no tiene dato, no hay nada que extraer. */
     if (dato==nullptr)
