@@ -14,17 +14,17 @@ namespace ITSON {
 
 /* Devuelve una lista ligada de los registros de entradas o salidas del
    inventario del archivo asociado con el parámetro. */
-forward_list<CILES> generar_lista(ifstream& ifs);
+std::forward_list<CILES> generar_lista(std::ifstream& ifs);
 
 /* Devuelve un árbol binario de objetos CILES de los registros del inventario
    del archivo asociado con el parámetro. */
-Arbol_binario<CILES> generar_arbol(ifstream& ifs);
+Arbol_binario<CILES> generar_arbol(std::ifstream& ifs);
 
 /* Actualiza el inventario según las entradas o salidas de la lista. El
    parámetro ofstream es el stream asociado al archivo del inventario. El
    parámetro entrada indica si la lista es de entrada. */
 void actualizar_inventario(Arbol_binario<CILES>& inventario,
-                          const forward_list<CILES>& lista, bool entrada);
+                          const std::forward_list<CILES>& lista, bool entrada);
 
 /* Borra el contenido del archivo del inventario y de su árbol binario. */
 void vaciar_inventario(Arbol_binario<CILES>& inventario);
