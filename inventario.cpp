@@ -44,7 +44,7 @@ void actualiza_archivo(const Arbol_binario<CILES>& inventario)
    parámetro ofstream es el stream asociado al archivo del inventario. El
    parámetro entrada indica si la lista es de entrada. */
 void actualizar_inventario(Arbol_binario<CILES>& inventario,
-                          const forward_list<CILES>& lista, bool entrada)
+                           const forward_list<CILES>& lista, bool entrada)
 {
     /* Por cada artículo en la lista de entrada/salida... */
     for (auto it=lista.begin(); it!=lista.end(); ++it)
