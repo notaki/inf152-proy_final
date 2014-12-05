@@ -20,11 +20,11 @@ public:
           const std::string& almacen, const std::string& nombre,
           double cantidad, const std::string& unidad);
 
-    /* Asigna una nueva cantidad.
+    /* Suma a la cantidad del registro.
        Arroja la excepción:
        std::invalid_argument - Si se intenta asignar una cantidad real a un
                                registro de unidad entera. */
-    CILES& operator=(double cantidad);
+    CILES& operator+=(double cantidad);
 
     // Llaves de ordenamiento de mayor a menor.
     const std::string& clave() const { return clave_; }
