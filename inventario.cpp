@@ -13,7 +13,7 @@ using namespace std;
 namespace ITSON {
 
 /* Nombre de archivo del inventario. */
-const string arch_inventario = "INVENTARIO.DAT";
+const string arch_inventario="INVENTARIO.DAT";
 
 /* Devuelve el ofstream asociado con el archivo del inventario. */
 ofstream& ofs_inv()
