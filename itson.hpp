@@ -32,7 +32,7 @@ void vaciar_inventario(Arbol_binario<CILES>& inventario);
 /* Lista los registros del inventario hacia la pantalla (implementado por el
    parámetro imprimir).*/
 void listar_inventario(Arbol_binario<CILES>& inventario,
-                       void (* imprimir)(CILES& registro));
+                       void (* imprimir)(const CILES& registro));
 
 }
 
