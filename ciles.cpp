@@ -151,7 +151,7 @@ ifstream& operator>>(ifstream& ifs, CILES& registro)
     return ifs;
 }
 
-/* Guarda un registro por línea al archivo asociado con el objeto ofstream. */
+/* Guarda un registro al archivo asociado con el objeto ofstream. */
 ofstream& operator<<(ofstream& ofs, const CILES& registro)
 {
     ofs<<registro.clave()<<' '<< registro.campus()<<' '<<registro.almacen()<<' '
