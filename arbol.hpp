@@ -14,9 +14,10 @@ public:
     Arbol_binario();
     Arbol_binario(const T& dato);
     Arbol_binario(Arbol_binario&& tmp);
+    Arbol_binario& operator=(const Arbol_binario&) = default;
     ~Arbol_binario();
 
-    bool vacio();
+    bool vacio() const;
 
     /* Las funciones inserta(), extrae() y busca() reciben como segundo
        parámetro un puntero a función int que recibe dos parámetros, arg1 y arg2
