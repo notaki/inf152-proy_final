@@ -11,7 +11,7 @@ namespace ITSON {
 
 /* Devuelve un árbol binario de objetos CILES de los registros del inventario
    del archivo asociado con el parámetro. */
-Arbol_binario<CILES> genera_arbol(ifstream& ifs)
+Arbol_binario<CILES> generar_arbol(ifstream& ifs)
 {
     if (!ifs.is_open())
         throw invalid_argument {"genera_arbol() de ifstream::is_open()==false"};
