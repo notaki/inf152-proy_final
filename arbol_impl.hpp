@@ -39,7 +39,7 @@ Arbol_binario<T>::~Arbol_binario()
 }
 
 template <class T>
-bool Arbol_binario<T>::vacio()
+bool Arbol_binario<T>::vacio() const
 {
     return dato==nullptr;
 }
