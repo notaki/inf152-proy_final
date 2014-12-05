@@ -21,7 +21,7 @@ Arbol_binario<CILES> genera_arbol(ifstream& ifs)
 
     /* Mientras no se llege al final del archivo, lee registros. */
     while (ifs) {
-        for (CILES tmp; ifs >> tmp; arbol.insertar(tmp,ciles_cmp));
+        for (CILES tmp; ifs>>tmp; arbol.insertar(tmp,ciles_cmp));
         if (ifs.fail() && !ifs.eof()) ifs.clear();
     }
 
