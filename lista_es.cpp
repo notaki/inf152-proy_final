@@ -12,7 +12,7 @@ namespace ITSON {
 
 /* Devuelve una lista ligada de los registros de entradas o salidas del
    inventario del archivo asociado con el parámetro. */
-forward_list<CILES> genera_lista(ifstream& ifs)
+forward_list<CILES> generar_lista(ifstream& ifs)
 {
     if (!ifs.is_open())
         throw invalid_argument {"genera_lista() de ifstream::is_open()==false"};
