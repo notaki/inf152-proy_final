@@ -7,7 +7,7 @@ using namespace ITSON;
 
 namespace interfaz {
 
-typedef std::forward_list<CILES> Lista;
+typedef const std::forward_list<CILES> Lista;
 typedef Arbol_binario<CILES> Arbol;
 
 /* Opciones para escoger en los diferentes menús de la interfaz. */
@@ -63,7 +63,7 @@ Opc menu_inventario(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
     return opcion;
 }
 
-void imprime_lista(const Lista& lista)
+void imprime_lista(Lista& lista)
 {
     for (auto it=lista.begin(); it!=lista.end(); ++it) imprimir(*it);
 }
@@ -87,7 +87,7 @@ void actualiza_v_claves(const CILES& registro)
     if (!found) v_claves().push_back(registro.clave());
 }
 
-void actualiza_v_claves(const Lista& lista_ent, const Arbol& inventario)
+void actualiza_v_claves(Lista& lista_ent, const Arbol& inventario)
 {
     /* Agrega a v_claves() las claves nuevas en la lista y el inventario. */
     for (auto it=lista_ent.begin(); it!=lista_ent.end(); ++it) {
@@ -110,7 +110,7 @@ void imprimir_claves()
 }
 
 /* Se asume que esta opción de menú debe imprimir las claves a pantalla. */
-void claves(const Lista& lista_ent, const Arbol& inventario)
+void claves(Lista& lista_ent, const Arbol& inventario)
 {
     actualiza_v_claves(lista_ent,inventario);
 
