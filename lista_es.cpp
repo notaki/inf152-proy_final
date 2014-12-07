@@ -1,32 +1,33 @@
-#include <fstream>
-#include "lista.h"
-#include "ciles.h"
+/* Johel Guerrero
+   Tercer cuatrimestre 2014 (Nov. 30)
+
+En este archivo se define la función genera_lista() que lee de un archivo las
+entradas o salidas del inventario. */
+#include <forward_list>
+#include <stdexcept>
+#include "ciles.hpp"
 using namespace std;
 
-char archEntrada[] = "ENTRADAS.DAT";
-char archSalida[] = "SALIDAS.DAT";
+namespace ITSON {
 
-LISTA generaLista(char es) {
-	if (es != 'E' && es != 'S') return NULL;
-	
-	ifstream ifs ((es == 'E') ? archEntrada : archSalida);
-	
-	LISTA lista = NULL;
-	inicializarLista(&lista);
-	
-	NODO* anterior = NULL;
-	CILES registro;
-	int regNum = 0;
-	while (ifs >> registro) {
-		registro.reg = ++regNum;
-		CILES* tmpRegistro = new CILES;
-		*tmpRegistro = registro;
-		
-		NODO* tmpNodo = creaNodo(tmpRegistro,sizeof(CILES));
-		insertarLista(&lista,anterior,tmpNodo);
-		
-		anterior = tmpNodo;
-	}
-	
-	return lista;
+/* Devuelve una lista ligada de los registros de entradas o salidas del
+   inventario del archivo asociado con el parámetro. */
+forward_list<CILES> generar_lista(ifstream& ifs)
+{
+    if (!ifs.is_open())
+        throw invalid_argument {"genera_lista() de ifstream::is_open()==false"};
+    ifs.seekg(0);
+
+    forward_list<CILES> lista;
+
+    auto it=lista.before_begin();
+    /* Mientras no se llege al final del archivo, lee registros. */
+    while (ifs) {
+        for (CILES reg; ifs>>reg; it=lista.insert_after(it,reg));
+        if (ifs.fail() && !ifs.eof()) ifs.clear();
+    }
+
+    return lista;
+}
+
 }
