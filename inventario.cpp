@@ -59,12 +59,12 @@ void actualizar_inventario(Arbol_binario<CILES>& inventario,
     catch (const range_error& e) {
         /* y el archivo es de entrada, agrégalo al inventario. */
         if (entrada) inventario.insertar(*it,ciles_cmp);
-        else cerr<<e.what()<<"\nllaves: "<<it->clave()<<' '<<it->campus()<<' '
-                 <<it->almacen()<<'\n';
+        /*else cerr<<e.what()<<"\nllaves: "<<it->clave()<<' '<<it->campus()<<' '
+                 <<it->almacen()<<'\n';*/
     }
     /* Si no se pudo aumentar la cantidad. */
-    catch (const std::invalid_argument& e) {
-        cerr<<e.what()<<'\n';
+    catch (const invalid_argument& e) {
+        //cerr<<e.what()<<'\n';
     }
 
     actualiza_archivo(inventario);
