@@ -3,25 +3,19 @@
 #include <iostream>
 #include <vector>
 #include "itson.hpp"
+#include "interfaz.hpp"
 using namespace ITSON;
 
-namespace interfaz {
+using Lista=const std::forward_list<CILES>;
+using Arbol=Arbol_binario<CILES>;
 
-typedef const std::forward_list<CILES> Lista;
-typedef Arbol_binario<CILES> Arbol;
+namespace ITSON {
 
-/* Opciones para escoger en los diferentes menús de la interfaz. */
-enum class Opc {claves,entradas,salidas,inventario,salir};
-const Opc actualizar {Opc::claves};
-const Opc iniciar {Opc::entradas};
-const Opc listar {Opc::salidas};
+namespace GUI {
 
-/* Interfaz de la figura 16-24. */
 Opc menu_actualizar(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion=Opc::salir;
-
-    // Consigue la opción que escoge el usuario en la interfaz.
+    Opc opcion {manejar_menu(gui_actualizar,int(Opc::entradas),int(Opc::salir))};
 
     switch (opcion) {
     case Opc::entradas: actualizar_inventario(inventario,lista_ent,true); break;
@@ -35,27 +29,18 @@ Opc menu_actualizar(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
     return opcion;
 }
 
-/* Interfaz de la figura 16-25. */
-void imprimir(const CILES& registro)
-{
-    // Imprimir el registro a pantalla.
-}
-
-/* Interfaz de la figura 16-23. */
 Opc menu_inventario(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion=Opc::salir;
-
-    // Consigue la opción que escoge el usuario en la interfaz.
+    Opc opcion {manejar_menu(gui_inventario,int(Opc_actualizar),int(Opc::salir))};
 
     switch (opcion) {
-    case actualizar:
+    case Opc_actualizar:
         while (menu_actualizar(lista_ent,lista_sal,inventario)!=Opc::salir);
         break;
-    case iniciar: vaciar_inventario(inventario); break;
-    case listar: listar_inventario(inventario,imprimir); break;
+    case Opc_iniciar: vaciar_inventario(inventario); break;
+    case Opc_listar: manejar_registros(inventario); break;
     case Opc::salir: break;
-    case Opc::inventario:
+    case Opc::claves:
         throw std::invalid_argument {"menu_inventario() opción inválida"};
     default: throw std::out_of_range {"menu_inventario() opción no definida"};
     }
@@ -63,74 +48,55 @@ Opc menu_inventario(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
     return opcion;
 }
 
-void imprime_lista(Lista& lista)
-{
-    for (auto it=lista.begin(); it!=lista.end(); ++it) imprimir(*it);
-}
-
 /* Guarda las claves. */
-std::vector<std::string>& v_claves()
+std::vector<std::string>& claves()
 {
-    static std::vector<std::string> v_c;
-    return v_c;
+    static std::vector<std::string> claves;
+    return claves;
 }
 
 void actualiza_v_claves(const CILES& registro)
 {
-    bool found=false;
-    for (auto s : v_claves())
-        if (s==registro.clave()) {
-            found=true;
-            break;
-        }
-
-    if (!found) v_claves().push_back(registro.clave());
+    for (auto s : claves()) if (s==registro.clave()) return;
+    claves().push_back(registro.clave());
 }
 
+/* Agrega a v_claves() las claves nuevas en la lista y el inventario. */
 void actualiza_v_claves(Lista& lista_ent, const Arbol& inventario)
 {
-    /* Agrega a v_claves() las claves nuevas en la lista y el inventario. */
     for (auto it=lista_ent.begin(); it!=lista_ent.end(); ++it) {
         bool found=false;
-        for (auto s : v_claves())
+        for (auto s : claves())
             if (s==it->clave()) {
                 found=true;
                 break;
             }
 
-        if (!found) v_claves().push_back(it->clave());
+        if (!found) claves().push_back(it->clave());
     }
-    inventario.visitar_en_orden(actualiza_v_claves);
-}
 
-/* Interfaz similar a la figura 16-25. */
-void imprimir_claves()
-{
-    // Imprime las claves en v_claves() a pantalla.
+    inventario.visitar_en_orden(actualiza_v_claves);
 }
 
 /* Se asume que esta opción de menú debe imprimir las claves a pantalla. */
 void claves(Lista& lista_ent, const Arbol& inventario)
 {
+    claves().clear();
     actualiza_v_claves(lista_ent,inventario);
-
-    imprimir_claves();
+    manejar_claves(claves());
 }
 
-/* Interfaz de la figura 16-22. */
 Opc menu_principal(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
 {
-    Opc opcion=Opc::salir;
-
-    // Consigue la opción que escoge el usuario en la interfaz.
+    Opc opcion {manejar_menu(gui_principal,int(Opc::claves),int(Opc::salir))};
 
     switch (opcion) {
     case Opc::claves: claves(lista_ent,inventario); break;
-    case Opc::entradas: imprime_lista(lista_ent); break;
-    case Opc::salidas: imprime_lista(lista_sal); break;
     case Opc::inventario:
         while (menu_inventario(lista_ent,lista_sal,inventario)!=Opc::salir);
         break;
+    case Opc::entradas: manejar_registros(lista_ent); break;
+    case Opc::salidas: manejar_registros(lista_sal); break;
     case Opc::salir: break;
     default: throw std::out_of_range {"menu_principal() opción no definida"};
     }
@@ -138,14 +104,17 @@ Opc menu_principal(Lista& lista_ent, Lista& lista_sal, Arbol& inventario)
     return opcion;
 }
 
-} // Final de namespace interfaz
+} // Final del namespace GUI
 
-/* Devuelve el ifstream asociado con el archivo de nombre del parámetro. */
-std::ifstream& genera_ifstream(const std::string& arch="")
+} // Final del namespace ITSON
+
+/* Devuelve el ifstream asociado con el archivo de nombre del parámetro, o el
+   anteriormente abierto. */
+std::ifstream& obtener_ifs(const std::string& arch="")
 {
     static std::ifstream ifs;
-    if (ifs.is_open()) ifs.close();
     if (!arch.empty()) {
+        if (ifs.is_open()) ifs.close();
         ifs.open(arch);
         if (!ifs) throw std::runtime_error {"error abriendo/creando archivo " +
                                              arch};
@@ -158,18 +127,19 @@ std::ifstream& genera_ifstream(const std::string& arch="")
 int main()
 try {
     const std::string arch_ent {"ENTRADAS.DAT"};
-    auto lista_ent=generar_lista(genera_ifstream(arch_ent));
+    Lista lista_ent {generar_lista(obtener_ifs(arch_ent))};
 
     const std::string arch_sal {"SALIDAS.DAT"};
-    auto lista_sal=generar_lista(genera_ifstream(arch_sal));
+    Lista lista_sal {generar_lista(obtener_ifs(arch_sal))};
 
     const std::string arch_inventario {"INVENTARIO.DAT"};
-    auto inventario=generar_arbol(genera_ifstream(arch_inventario));
+    Arbol inventario {generar_arbol(obtener_ifs(arch_inventario))};
 
-    genera_ifstream();
+    obtener_ifs().close();
 
-    while (interfaz::menu_principal(lista_ent,lista_sal,inventario)
-           !=interfaz::Opc::salir);
+    GUI::inicializar();
+    while (GUI::menu_principal(lista_ent,lista_sal,inventario)!=GUI::Opc::salir);
+    GUI::finalizar();
 }
 catch (const std::exception& e) {
     std::cerr<<e.what()<<'\n';
